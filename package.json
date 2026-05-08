@@ -38,15 +38,15 @@
   ],
   "author": {
     "name": "NtechServices",
-    "url": "https://github.com/ntechservices"
+    "url": "https://github.com/loicgeek"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ntechservices/smspitt.git"
+    "url": "https://github.com/loicgeek/smspitt.git"
   },
-  "homepage": "https://github.com/ntechservices/smspitt#readme",
+  "homepage": "https://github.com/loicgeek/smspitt#readme",
   "bugs": {
-    "url": "https://github.com/ntechservices/smspitt/issues"
+    "url": "https://github.com/loicgeek/smspitt/issues"
   }
 }

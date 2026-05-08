@@ -457,4 +457,4 @@ sse.broadcast('message.created', { ... });
 
 ## License
 
-MIT © [NtechServices](https://github.com/ntechservices)
+MIT © [NtechServices](https://github.com/loicgeek)
