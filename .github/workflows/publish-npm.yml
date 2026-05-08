@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write   # for npm provenance
+      id-token: write   # required for OIDC trusted publishing + provenance
 
     steps:
       - uses: actions/checkout@v4
@@ -23,12 +23,11 @@ jobs:
 
       - run: npm ci
 
-      # Sync version in package.json with the git tag (strips leading 'v')
-      # Use `npm pkg set` — unlike `npm version`, it never errors if already matching
+      # Use `npm pkg set` — unlike `npm version`, never errors if version already matches tag
       - name: Set version from tag
         run: npm pkg set version="${GITHUB_REF_NAME#v}"
 
+      # No NODE_AUTH_TOKEN — npm exchanges the GitHub OIDC token directly.
+      # Requires "Trusted publisher" configured on npmjs.com (see below).
       - name: Publish
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
