@@ -2,7 +2,7 @@
 
 > The Mailpit for SMS. Intercept, inspect and simulate SMS messages during development and testing.
 
-SMSPit is a local mock server that imitates the HTTP APIs of real SMS providers (Twilio, Orange, Vonage, Africa's Talking). Your app sends SMS normally — SMSPit captures every message without forwarding it, and exposes them through a live Web UI and a REST API for test assertions.
+SMSPit is a local mock server that imitates the HTTP APIs of real SMS providers (Twilio, Orange, Vonage, Africa's Talking and more). Your app sends SMS normally — SMSPit captures every message without forwarding it, and exposes them through a live Web UI and a REST API for test assertions.
 
 **Zero config. Single binary. `npx smspitt` and you're done.**
 
