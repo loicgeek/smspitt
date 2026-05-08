@@ -24,10 +24,9 @@ jobs:
       - run: npm ci
 
       # Sync version in package.json with the git tag (strips leading 'v')
+      # Use `npm pkg set` — unlike `npm version`, it never errors if already matching
       - name: Set version from tag
-        run: |
-          VERSION=${GITHUB_REF_NAME#v}
-          npm version "$VERSION" --no-git-tag-version
+        run: npm pkg set version="${GITHUB_REF_NAME#v}"
 
       - name: Publish
         run: npm publish --provenance --access public
