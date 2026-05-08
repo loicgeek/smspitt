@@ -11,6 +11,12 @@
     "bin/",
     "src/"
   ],
+  "scripts": {
+    "start": "node bin/smspitt.js",
+    "dev": "node bin/smspitt.js --verbose",
+    "start:sqlite": "node bin/smspitt.js --storage=sqlite",
+    "start:ci": "node bin/smspitt.js --no-ui --no-open"
+  },
   "engines": {
     "node": ">=22"
   },
@@ -23,12 +29,24 @@
     "mock",
     "testing",
     "twilio",
+    "orange",
+    "vonage",
+    "africastalking",
     "mailpit",
-    "development"
+    "development",
+    "local"
   ],
+  "author": {
+    "name": "NtechServices",
+    "url": "https://github.com/ntechservices"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ntechservices/smspitt"
+    "url": "https://github.com/ntechservices/smspitt.git"
+  },
+  "homepage": "https://github.com/ntechservices/smspitt#readme",
+  "bugs": {
+    "url": "https://github.com/ntechservices/smspitt/issues"
   }
 }

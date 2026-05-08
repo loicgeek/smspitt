@@ -1,0 +1,33 @@
+{
+  "name": "ntechservices/smspitt-laravel",
+  "description": "Laravel companion package for SMSPit — SMS mock server",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^10.0|^11.0|^12.0",
+    "illuminate/http": "^10.0|^11.0|^12.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0|^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "NtechServices\\SmsPitt\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "NtechServices\\SmsPitt\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "NtechServices\\SmsPitt\\SmsPittServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

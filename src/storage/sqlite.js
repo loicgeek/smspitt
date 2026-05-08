@@ -63,15 +63,14 @@ export class SQLiteStorage {
   }
 
   update(id, updates) {
-    const msg = this.findById(id);
-    if (!msg) return null;
+    if (!this.findById(id)) return null;
+    const colMap = { status: 'status', webhookUrl: 'webhook_url' };
     const updatedAt = new Date().toISOString();
-    const fields = Object.entries(updates)
-      .map(([k]) => {
-        const col = k === 'webhookUrl' ? 'webhook_url' : k;
-        return `${col} = @${k}`;
-      })
+    const fields = Object.keys(updates)
+      .filter(k => colMap[k])
+      .map(k => `${colMap[k]} = @${k}`)
       .join(', ');
+    if (!fields) return this.findById(id);
     this.#db.prepare(`UPDATE messages SET ${fields}, updated_at = @updatedAt WHERE id = @id`)
       .run({ ...updates, id, updatedAt });
     return this.findById(id);

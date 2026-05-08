@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMSPit</title>
+  <style>__STYLE__</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">SMS<span>Pit</span></div>
+  <div class="header-version">v__VERSION__</div>
+  <div class="header-spacer"></div>
+  <div class="live-badge">
+    <div class="live-dot" id="live-dot"></div>
+    <span id="live-text">Connecting…</span>
+  </div>
+  <button class="btn btn-ghost" id="btn-inbound" title="Simulate inbound SMS">↩ Inbound</button>
+  <button class="btn btn-danger" id="btn-clear" title="Clear all messages">🗑 Clear all</button>
+</header>
+
+<div class="layout">
+  <!-- Left: message list -->
+  <aside class="panel-left">
+    <div class="search-bar">
+      <input id="search" class="search-input" type="search" placeholder="Search to, from, body…" />
+    </div>
+    <div class="filters">
+      <select id="filter-provider" class="filter-select">
+        <option value="">All providers</option>
+        <option value="twilio">Twilio</option>
+        <option value="orange">Orange</option>
+        <option value="vonage">Vonage</option>
+        <option value="africastalking">Africa's Talking</option>
+        <option value="generic">Generic</option>
+        <option value="inbound">Inbound</option>
+      </select>
+      <select id="filter-status" class="filter-select">
+        <option value="">All statuses</option>
+        <option value="queued">Queued</option>
+        <option value="delivered">Delivered</option>
+        <option value="failed">Failed</option>
+        <option value="undelivered">Undelivered</option>
+        <option value="received">Received</option>
+      </select>
+    </div>
+    <div class="msg-list" id="msg-list">
+      <div class="msg-list-empty">
+        <p>💬</p>
+        <p>No messages yet</p>
+        <p style="font-size:11px;margin-top:4px">Send an SMS to port __MOCK_PORT__</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right: detail -->
+  <main class="panel-right">
+    <div id="detail" style="height:100%">
+      <div class="detail-empty">
+        <span>📭</span>
+        <p>Select a message to inspect it</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Inbound SMS modal -->
+<div class="modal-overlay" id="inbound-modal">
+  <div class="modal">
+    <h3>Simulate Inbound SMS</h3>
+    <div class="form-group">
+      <label>From (sender) *</label>
+      <input id="inbound-from" type="text" placeholder="+237655000000" />
+    </div>
+    <div class="form-group">
+      <label>To (your number) *</label>
+      <input id="inbound-to" type="text" placeholder="+237612345678" />
+    </div>
+    <div class="form-group">
+      <label>Message *</label>
+      <textarea id="inbound-body" placeholder="OUI"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Webhook URL (optional)</label>
+      <input id="inbound-webhook" type="url" placeholder="http://localhost:8000/sms/inbound" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+      <button class="btn btn-primary" id="modal-submit">Send inbound</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>__SCRIPT__</script>
+</body>
+</html>

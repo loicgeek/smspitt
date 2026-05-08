@@ -1,0 +1,16 @@
+services:
+  smspitt:
+    image: ntechservices/smspitt:latest
+    ports:
+      - "2875:2875"
+      - "2876:2876"
+      - "2877:2877"
+    environment:
+      - NODE_ENV=production
+    # Uncomment to persist messages across restarts:
+    # volumes:
+    #   - smspitt-data:/root/.smspitt
+    # command: ["--no-open", "--storage=sqlite"]
+
+# volumes:
+#   smspitt-data:
