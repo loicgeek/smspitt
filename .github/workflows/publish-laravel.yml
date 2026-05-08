@@ -1,0 +1,38 @@
+name: Sync Laravel package
+
+# Pushes packages/laravel/ to loicgeek/smspitt-laravel on every tag
+# and on every push to main (so Packagist always has the latest)
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history required for subtree
+
+      - name: Push subtree to smspitt-laravel
+        uses: danharrin/monorepo-split-github-action@v2.3.0
+        with:
+          # Source folder inside this repo
+          package_directory: 'packages/laravel'
+
+          # Target repository
+          repository_organization: 'loicgeek'
+          repository_name: 'smspitt-laravel'
+
+          # Tag to push (only set when we're on a tag push)
+          tag: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}

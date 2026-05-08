@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['22', '23']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Smoke test — start server and hit all providers
+        run: |
+          node bin/smspitt.js --no-open --no-ui &
+          SERVER_PID=$!
+          sleep 2
+
+          # Health
+          curl -sf http://localhost:2877/api/v1/health | grep '"status":"ok"'
+
+          # Twilio
+          curl -sf -X POST http://localhost:2876/twilio/2010-04-01/Accounts/ACtest/Messages.json \
+            -d "To=%2B237612345678&From=TEST&Body=CI+check" | grep '"status":"queued"'
+
+          # Generic JSON
+          curl -sf -X POST http://localhost:2876/generic \
+            -H "Content-Type: application/json" \
+            -d '{"to":"+33600000001","from":"CI","message":"hello"}' | grep '"status":"queued"'
+
+          # Vonage
+          curl -sf -X POST http://localhost:2876/vonage/sms/json \
+            -d "to=%2B237600000002&from=CI&text=vonage" | grep '"message-count"'
+
+          # Africa's Talking
+          curl -sf -X POST http://localhost:2876/africastalking/version1/messaging \
+            -d "to=%2B237600000003&from=CI&message=at&username=sandbox" | grep '"SMSMessageData"'
+
+          # Orange
+          curl -sf -X POST http://localhost:2876/orange/smsmessaging/outbound/requests \
+            -H "Content-Type: application/json" \
+            -d '{"outboundSMSMessageRequest":{"address":"tel:+237600000004","senderAddress":"tel:CI","outboundSMSTextMessage":{"message":"orange"}}}' \
+            | grep '"deliveryInfoList"'
+
+          # Assert count = 5
+          COUNT=$(curl -sf http://localhost:2877/api/v1/messages | python3 -c "import sys,json; print(json.load(sys.stdin)['total'])")
+          [ "$COUNT" -eq 5 ] || (echo "Expected 5 messages, got $COUNT" && exit 1)
+
+          # Inbound simulation
+          curl -sf -X POST http://localhost:2877/api/v1/inbound \
+            -H "Content-Type: application/json" \
+            -d '{"from":"+237655000000","to":"+237612345678","body":"OUI"}' | grep '"status":"received"'
+
+          # Status simulation
+          ID=$(curl -sf http://localhost:2877/api/v1/messages | python3 -c "import sys,json; print(json.load(sys.stdin)['messages'][0]['id'])")
+          curl -sf -X POST "http://localhost:2877/api/v1/messages/$ID/status" \
+            -H "Content-Type: application/json" \
+            -d '{"status":"delivered"}' | grep '"status":"delivered"'
+
+          # Reset
+          curl -sf -X DELETE http://localhost:2877/api/v1/messages | grep '"deleted"'
+
+          # SQLite mode
+          kill $SERVER_PID
+          node bin/smspitt.js --no-open --no-ui --storage=sqlite --db-path=/tmp/smspitt-ci.db &
+          SQLITE_PID=$!
+          sleep 2
+          curl -sf http://localhost:2877/api/v1/health | grep '"storage":"sqlite"'
+          kill $SQLITE_PID
+
+          echo "All smoke tests passed"
