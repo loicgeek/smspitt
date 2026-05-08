@@ -1,5 +1,5 @@
 {
-  "name": "ntechservices/smspitt-laravel",
+  "name": "ntech-services/smspitt-laravel",
   "description": "Laravel companion package for SMSPit — SMS mock server",
   "type": "library",
   "license": "MIT",
